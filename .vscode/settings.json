@@ -1,0 +1,6 @@
+{
+    "workbench.settings.openDefaultKeybindings": true,
+    "workbench.settings.openDefaultSettings": true,
+    "workbench.editor.focusRecentEditorAfterClose": false,
+    "workbench.editor.enablePreview": false
+}
