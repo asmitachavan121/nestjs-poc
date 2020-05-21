@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, BaseEntity } from 'typeorm';
 
 enum coeStatusEnum {
     Studying = 'Studying',
@@ -14,7 +14,7 @@ enum genderEnum {
 enum studentTypeEnum {Commencing ='Commencing'}
 
 @Entity()
-export abstract class MasterStudentEntity {
+export abstract class MasterStudentEntity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 

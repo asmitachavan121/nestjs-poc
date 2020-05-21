@@ -1,8 +1,6 @@
 import { Client } from 'pg';
-import { configService } from '../config/config.service'
-
-const port = configService.getPort()
-console.log(port)
+// import { configService } from '../config/config.service'
+// console.log(port)
 
 // console.log(process.env);
 
@@ -14,3 +12,18 @@ const client = new Client({
 client.connect()
 
 export { client }
+
+// @Injectable()
+// export class DbConnectionService {
+
+//     port = configService.getPort();
+//     connectionString = 'postgressql://postgres:mysecretpassword@localhost:5432/my_database'
+//     client = new Client({
+//         connectionString:this.connectionString
+//     })
+
+//     getClient() {
+//         return this.client
+//     }
+
+// }

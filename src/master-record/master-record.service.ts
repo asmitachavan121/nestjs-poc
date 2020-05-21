@@ -1,25 +1,42 @@
-import { Injectable, ConflictException, InternalServerErrorException, NotAcceptableException } from '@nestjs/common';
-// import { Client } from 'pg';
-import { client } from "./dbconnect.service"
+import { Injectable, ConflictException, InternalServerErrorException, NotAcceptableException, Options } from '@nestjs/common';
+import { client } from './dbconnect.service';
+import { MasterStudentEntity } from 'src/model/master-student.entity';
+import { createConnection } from 'net';
+// import { Db } from 'typeorm';
 
 @Injectable()
 export class MasterRecordService {
 
+
+
     async getMasterRecords() {
 
+
+        // createConnection(Options)
+        // return result
+
         const myquery = 'SELECT * FROM "MasterStudents";'
+        // console.log(DbConnectionService)
         try {
-            // const res = await client.query(myquery)
-            await client.query(myquery)
+            const res = await client.query(myquery)
+            // const client = this.DbConnection.getClient()
+            // await client.query(myquery)
             // console.log(res.rows) // Hello world!
             // await client.end()
-            return "Data fetched successfully!"
+            return res
+            // return "Data fetched successfully!"
         } catch(error) {
             console.log('error occured while querying',error)
         }
         // return "Hello world!";
     }
 
+    async getMasterRecordById(id: number) {
+
+        const query = `SELECT * FROM "MasterStudents" WHERE id='${id}';`
+        const res = await client.query(query)
+        return res
+    }
     async insertData(data: any) {
 
         // console.log(data.coeStatus)  

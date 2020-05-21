@@ -5,7 +5,7 @@ import { AppModule } from '../src/app.module';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
-
+  const Id = Math.floor(Math.random() * 1000);
   beforeEach(async () => {
     
     jest.setTimeout(10000)
@@ -27,12 +27,12 @@ describe('AppController (e2e)', () => {
       .expect('Hello World!');
   });
 
-  it('/ get master-record', () => {
+  it('/ get all master-record', async () => {
    
-      return request(app.getHttpServer())
+     const res = await request(app.getHttpServer())
       .get('/master-record')
       .expect(200)
-      .expect('Data fetched successfully!')
+     expect(res.body.rowCount).toBeGreaterThan(0)
       // .expect('Hello World!');
     // }catch(err) {
 
@@ -45,13 +45,13 @@ describe('AppController (e2e)', () => {
     // }
    
   });
-  it(' Post master-record', async () => {
+  it('/ POST master-record', async () => {
 
     expect.assertions(2)
     const student = {
-      "id": Math.floor(Math.random() * 1000),
+      "id": Id,
       "coeStatus":"Studying",
-      "providerStudentID": Math.floor(Math.random() * 1000),
+      "providerStudentID": Id,
       "firstName":"Radika",
       "familyName":"Deshmukh",
       "gender":"Female",
@@ -82,11 +82,11 @@ describe('AppController (e2e)', () => {
       // .expect('Hello World!');
   });
 
-  it(' Post master-record - inserting duplicate data expect conflict error statusCode - 409 ', async () => {
+  it('/ POST master-record - inserting duplicate data expect conflict error statusCode - 409 ', async () => {
     expect.assertions(1)
     const student = {
-      "id":11,
-      "providerStudentID":11,
+      "id": Id,
+      "providerStudentID":Id,
       "coeStatus":"Studying",
       "firstName":"Radika",
       "familyName":"Deshmukh",
@@ -115,7 +115,7 @@ describe('AppController (e2e)', () => {
       // .expect('Hello World!');
   });
 
-  it(' Post master-record - inserting INVALID data expect Not acceptable error statusCode - 406 ', async () => {
+  it('/ POST master-record - inserting INVALID data expect Not acceptable error statusCode - 406 ', async () => {
 
     expect.assertions(1)
     const student = {
@@ -148,11 +148,21 @@ describe('AppController (e2e)', () => {
       // .expect('Hello World!');
   });
 
-  it('Delete Master record - expect statusCode-200', async () => {
+  it('/ GET master-record with id - expect statusCode-200', async () => {
+
+    const id = Id
+    const res = await request(app.getHttpServer())
+    .get(`/master-record/${id}`)
+    .expect(200)
+    
+    expect(res.body.rowCount).toBeDefined()
+
+  } )
+  it('/ DELETE Master record - expect statusCode-200', async () => {
 
     expect.assertions(1)
 
-    const id = 11
+    const id = Id
     const res = await request(app.getHttpServer())
     .delete(`/master-record/delete/${id}`)
     .expect(200)

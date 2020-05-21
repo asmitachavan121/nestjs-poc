@@ -14,11 +14,13 @@ import { MasterRecordMiddleware } from './middleware/master-record.midleware'
     providers: [MasterRecordService]
 })
 
-export class MasterRecordModule implements NestModule {
-    configure(consumer: MiddlewareConsumer) {
-        consumer
-        .apply( MasterRecordMiddleware )
-        .forRoutes({path: '/*', method: RequestMethod.DELETE})
-    }
+export class MasterRecordModule  {}
 
-}
+// export class MasterRecordModule implements NestModule {
+//     configure(consumer: MiddlewareConsumer) {
+//         consumer
+//         .apply( MasterRecordMiddleware )
+//         .forRoutes({path: '/*', method: RequestMethod.DELETE})
+//     }
+
+// }

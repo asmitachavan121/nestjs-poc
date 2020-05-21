@@ -16,6 +16,11 @@ export class MasterRecordController {
 
     }
 
+    @Get(':id')
+    getMasterRecordById(@Param('id') id: number) {
+
+        return this.masterRecordService.getMasterRecordById(id)
+    }
     @Post('upload')
     // @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
     async uploadData(@Body() data: any) {
@@ -47,6 +52,8 @@ export class MasterRecordController {
     @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
     uploadFile(@UploadedFile() file) {
+
+        
         // const mygender: genderEnum =  genderEnum.Female
         // console.log(mygender)
         console.log(file);
