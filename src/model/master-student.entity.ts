@@ -14,7 +14,7 @@ enum genderEnum {
 enum studentTypeEnum {Commencing ='Commencing'}
 
 @Entity()
-export abstract class MasterStudentEntity extends BaseEntity {
+export  class MasterStudentEntity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -70,4 +70,4 @@ export abstract class MasterStudentEntity extends BaseEntity {
     createDateTime: Date;
 }
 
-export {coeStatusEnum, genderEnum}
+export {coeStatusEnum, genderEnum, studentTypeEnum}

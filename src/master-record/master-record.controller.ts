@@ -1,6 +1,8 @@
-import {Controller, Get, Post, Body, UseInterceptors, UploadedFile, Patch, Delete, Param} from '@nestjs/common';
+import {Controller, Get, Post, Body, UseInterceptors, UploadedFile, Patch, Delete, Param, ValidationPipe, UsePipes} from '@nestjs/common';
 import {MasterRecordService} from "./master-record.service";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { CreateMasterRecordDto } from 'src/Dto/create-master-record.dto';
+import { UpdateMasterRecordDto } from './pipe/update-master-record.dto';
 // import { genderEnum } from "../model/master-student.entity"
 
 @Controller('master-record')
@@ -17,13 +19,14 @@ export class MasterRecordController {
     }
 
     @Get(':id')
-    getMasterRecordById(@Param('id') id: number) {
+    getMasterRecordById(@Param('id') id: string) {
 
         return this.masterRecordService.getMasterRecordById(id)
     }
     @Post('upload')
+    @UsePipes(ValidationPipe)
     // @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
-    async uploadData(@Body() data: any) {
+    async uploadData(@Body(ValidationPipe) data: CreateMasterRecordDto) {
         // console.log(data)
         try {
            return this.masterRecordService.insertData(data);
@@ -34,10 +37,11 @@ export class MasterRecordController {
         // return data
     }
 
-    @Patch('update')
-    updateData(@Body() data: any) {
-        console.log(data.title)
-        return data
+    @Patch('update/:id')
+    @UsePipes(ValidationPipe)
+    updateData(@Param('id') id:string, @Body() data: UpdateMasterRecordDto) {
+
+        return this.masterRecordService.updateData(id, data)
     }
 
     @Delete('delete/:id')
@@ -49,13 +53,19 @@ export class MasterRecordController {
     }
 
 
-    @Post('upload')
+    @Post('uploadfile')
     @UseInterceptors(FileInterceptor('file'))
-    uploadFile(@UploadedFile() file) {
-
-        
-        // const mygender: genderEnum =  genderEnum.Female
-        // console.log(mygender)
+        uploadFile(@UploadedFile() file) {
         console.log(file);
     }
+
+
+    // @Post('uploadfile')
+    // @UseInterceptors(FileInterceptor('file'))
+    // uploadFile(@UploadedFile() file) {
+
+        
+    //     console.log(file);
+    //     return file
+    // }
 }

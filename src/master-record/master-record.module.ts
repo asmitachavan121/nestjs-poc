@@ -4,7 +4,6 @@ import { MasterRecordService } from "./master-record.service";
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MulterModule } from '@nestjs/platform-express';
 import { configService } from '../config/config.service';
-import { MasterRecordMiddleware } from './middleware/master-record.midleware'
 @Module({
     imports: [
         MulterModule.register({dest: './files',}),

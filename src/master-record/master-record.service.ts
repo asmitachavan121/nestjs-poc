@@ -1,13 +1,14 @@
-import { Injectable, ConflictException, InternalServerErrorException, NotAcceptableException, Options } from '@nestjs/common';
+import { Injectable, ConflictException, InternalServerErrorException, NotAcceptableException, Options, NotFoundException } from '@nestjs/common';
 import { client } from './dbconnect.service';
 import { MasterStudentEntity } from 'src/model/master-student.entity';
 import { createConnection } from 'net';
+import { getRepository } from 'typeorm';
 // import { Db } from 'typeorm';
 
 @Injectable()
 export class MasterRecordService {
 
-
+    // studentRepo = MasterStudentEntity.getRepository()
 
     async getMasterRecords() {
 
@@ -15,69 +16,73 @@ export class MasterRecordService {
         // createConnection(Options)
         // return result
 
-        const myquery = 'SELECT * FROM "MasterStudents";'
+        // const myquery = 'SELECT * FROM "MasterStudents";'
         // console.log(DbConnectionService)
         try {
-            const res = await client.query(myquery)
+
+            const studentRepo = MasterStudentEntity.getRepository()
+            
+            const result = await studentRepo.find()
+            console.log(result)
+            // const res = await client.query(myquery)
             // const client = this.DbConnection.getClient()
             // await client.query(myquery)
             // console.log(res.rows) // Hello world!
             // await client.end()
-            return res
+            return result
             // return "Data fetched successfully!"
         } catch(error) {
             console.log('error occured while querying',error)
+            throw new InternalServerErrorException()
         }
         // return "Hello world!";
     }
 
-    async getMasterRecordById(id: number) {
+    async getMasterRecordById(id: string) {
 
-        const query = `SELECT * FROM "MasterStudents" WHERE id='${id}';`
-        const res = await client.query(query)
+        const studentRepo = MasterStudentEntity.getRepository()
+        const res = await studentRepo.findOne(id)
+
+        if(!res) {
+            throw new NotFoundException()
+        }
         return res
+
+        // const query = `SELECT * FROM "MasterStudents" WHERE id='${id}';`
+        // const res = await client.query(query)
+        // return res
     }
     async insertData(data: any) {
 
-        // console.log(data.coeStatus)  
-        const { id, coeStatus, 
-            providerStudentID,firstName, 
-            familyName, gender, dateOfBirth, 
-            nationality, courseName, 
-            proposedStartDate, proposedEndDate, 
-            visaEffectiveDate, enrolmentComments, 
-            locationName, studentType, 
-            lastChangedDateTime, createDateTime }  = data  
-
-        const query = `INSERT INTO "MasterStudents" VALUES(
-            ${id},'${coeStatus}',${providerStudentID},'${firstName}',
-            '${familyName}','${gender}','${dateOfBirth}','${nationality}',
-            '${courseName}','${proposedStartDate}','${proposedEndDate}','${visaEffectiveDate}',
-            '${enrolmentComments}','${locationName}','${studentType}','${lastChangedDateTime}',
-            '${createDateTime}'
-            );`
-
         try {
-            const res = await client.query(query)
-            res 
-            // console.log(res) // Hello world!
-            // await client.end()
-            return 'Data inserted successfully!'
+
+            const studentRepo = MasterStudentEntity.getRepository()
+            const res = await studentRepo.save(data)
+            // const res = await client.query(query)
+            return res.id
 
         } catch(e) {
             // console.log('error occured!', e)
-            if(e.code && e.code == 23505)
-                throw new ConflictException()
-            else  if(e.code && e.code == '22P02'){
-                throw new NotAcceptableException('Input not accepted!')
-            }
+            // if(e.code && e.code == 23505)
+            //     throw new ConflictException()
+            // else  if(e.code && e.code == '22P02'){
+            //     throw new NotAcceptableException('Input not accepted!')
+            // }
                 
-            throw new InternalServerErrorException()
+            throw new InternalServerErrorException(e)
 
         }
     }
 
-     async deleteData(id: number) {
+    async updateData(id: string, data: any) {
+
+        const studentRepo = MasterStudentEntity.getRepository()
+        const newdata = await this.getMasterRecordById(id)
+        const res = await studentRepo.update(id, data)
+        return newdata.id
+    }
+
+    async deleteData(id: number) {
 
         const query = `DELETE FROM "MasterStudents" WHERE id='${id}';`
         try {
