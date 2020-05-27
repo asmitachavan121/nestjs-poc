@@ -75,13 +75,13 @@ export class MasterRecordService {
         return newdata.id
     }
 
-    async deleteData(id: number) {
+    async deleteData(id: string) {
 
-        const query = `DELETE FROM "MasterStudents" WHERE id='${id}';`
         try {
-            const res = await client.query(query)
+            const studentRepo = MasterStudentEntity.getRepository()
+            const res = await studentRepo.delete(id)
             // console.log(res)
-            return res.command
+            return res
 
         } catch(e){
             console.log('error occured',e)
