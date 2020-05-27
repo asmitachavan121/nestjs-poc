@@ -1,8 +1,12 @@
-import { IsNotEmpty, IsIn, IsOptional, IsDate} from 'class-validator'
-import { coeStatusEnum, studentTypeEnum } from "src/model/master-student.entity";
+import { IsNotEmpty, IsIn, IsOptional, IsDate, IsAlpha, NotContains} from 'class-validator'
+import { coeStatusEnum, studentTypeEnum } from "../model/master-student.entity";
 import { genderEnum } from "../model/master-student.entity";
 import { Type } from "class-transformer";
 export class CreateMasterRecordDto {
+
+    @IsOptional()
+    @NotContains("!@#$%^&*()")
+    id: string
 
     @IsNotEmpty()
     @IsIn([
@@ -18,6 +22,7 @@ export class CreateMasterRecordDto {
     providerStudentID: number
 
     @IsNotEmpty()
+    @IsAlpha()
     firstName: string
 
     @IsNotEmpty()

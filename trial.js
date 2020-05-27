@@ -1,7 +1,7 @@
 
 
 // import {Pool, Client } from 'pg'
-const { Client } = require('pg')
+import { Client } from 'pg'
 
 async function fun() {
 

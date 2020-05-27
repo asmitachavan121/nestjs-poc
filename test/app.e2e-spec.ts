@@ -2,10 +2,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
+import 'jest-extended'
+import { coeStatusEnum, genderEnum, studentTypeEnum } from '../src/model/master-student.entity';
+import { async } from 'rxjs/internal/scheduler/async';
+ 
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   const Id = Math.floor(Math.random() * 1000);
+  let id
   beforeEach(async () => {
     
     jest.setTimeout(10000)
@@ -19,8 +24,8 @@ describe('AppController (e2e)', () => {
 
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
+  it('/ (GET)', async () => {
+    return  await request(app.getHttpServer())
     // request(app.getHttpServer())
       .get('/')
       .expect(200)
@@ -32,7 +37,9 @@ describe('AppController (e2e)', () => {
      const res = await request(app.getHttpServer())
       .get('/master-record')
       .expect(200)
-     expect(res.body.rowCount).toBeGreaterThan(0)
+     expect(res.body).toBeArray()
+     id = res.body[0].id
+     console.log(id)
       // .expect('Hello World!');
     // }catch(err) {
 
@@ -48,46 +55,48 @@ describe('AppController (e2e)', () => {
   it('/ POST master-record', async () => {
 
     expect.assertions(2)
-    const student = {
-      "id": Id,
-      "coeStatus":"Studying",
-      "providerStudentID": Id,
-      "firstName":"Radika",
-      "familyName":"Deshmukh",
-      "gender":"Female",
-      "dateOfBirth":"2000-04-05",
-      "nationality":"Indian",
-      "courseName":"dbms",
-      "proposedStartDate":"2000-04-05",
-      "proposedEndDate":"2004-04-05",
-      "visaEffectiveDate":"2000-04-05",
-      "enrolmentComments":"JEE",
-      "locationName":"Los Angeles",
-      "studentType":"Commencing",
-      "lastChangedDateTime":"2000-04-05",
-      "createDateTime":"2000-04-05"
-    }
 
+    const data = {
+      "coeStatus": coeStatusEnum.Approved,
+      "coeType": "studying",
+      "providerStudentID": "345",
+      "firstName": "Aisha",
+      "familyName": "Douson",
+      "gender": genderEnum.Female,
+      "dateOfBirth": "2000-04-05T00:00:00.000Z",
+      "nationality": "US",
+      "courseName": "dbms",
+      "proposedStartDate": "2000-04-05T00:00:00.000Z",
+      "proposedEndDate": "2004-04-05T00:00:00.000Z",
+      "visaEffectiveDate": "2000-04-05T00:00:00.000Z",
+      "enrolmentComments": "done",
+      "locationName": "UK",
+      "studentType": studentTypeEnum.Commencing,
+      "lastChangedDateTime": "2020-05-21T05:09:26.445Z",
+      "createDateTime": "2020-05-21T05:09:26.445Z"
+    }
+    
     // console.log(student)
     const res = await request(app.getHttpServer())
     // request(app.getHttpServer())
       .post('/master-record/upload')
       .set('Accept', 'application/json')
-      .send(student)
+      .send(data)
       
       expect(res.status).toBe(201)
 
       // console.log(res.body)
-      expect(res.body).toBeDefined()
+      expect(res.body).toBeObject()
       // .expect('Hello World!');
   });
 
   it('/ POST master-record - inserting duplicate data expect conflict error statusCode - 409 ', async () => {
     expect.assertions(1)
     const student = {
-      "id": Id,
+      "id": id,
       "providerStudentID":Id,
       "coeStatus":"Studying",
+      "coeType":"master",
       "firstName":"Radika",
       "familyName":"Deshmukh",
       "gender":"Female",
@@ -115,7 +124,7 @@ describe('AppController (e2e)', () => {
       // .expect('Hello World!');
   });
 
-  it('/ POST master-record - inserting INVALID data expect Not acceptable error statusCode - 406 ', async () => {
+  it('/ POST master-record - inserting INVALID data expect Bad Request error statusCode - 400 ', async () => {
 
     expect.assertions(1)
     const student = {
@@ -141,7 +150,7 @@ describe('AppController (e2e)', () => {
       .post('/master-record/upload')
       .set('Accept', 'application/json')
       .send(student)
-      .expect(406)
+      .expect(400)
 
       // console.log(res.body)
       expect(res.body).toBeDefined()
@@ -150,19 +159,19 @@ describe('AppController (e2e)', () => {
 
   it('/ GET master-record with id - expect statusCode-200', async () => {
 
-    const id = Id
+    // const Id = id
     const res = await request(app.getHttpServer())
     .get(`/master-record/${id}`)
     .expect(200)
     
-    expect(res.body.rowCount).toBeDefined()
+    expect(res.body).toBeObject()
 
   } )
   it('/ DELETE Master record - expect statusCode-200', async () => {
 
     expect.assertions(1)
 
-    const id = Id
+    // const id = Id
     const res = await request(app.getHttpServer())
     .delete(`/master-record/delete/${id}`)
     .expect(200)
