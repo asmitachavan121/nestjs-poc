@@ -1,16 +1,22 @@
-import { IsNotEmpty, IsIn, IsOptional, IsDate, IsAlpha, NotContains} from 'class-validator'
+import { IsNotEmpty, IsIn, IsOptional, IsDate, IsAlpha, NotContains, IsUUID, IsString, IsNumber} from 'class-validator'
 import { coeStatusEnum, studentTypeEnum } from "../model/master-student.entity";
 import { genderEnum } from "../model/master-student.entity";
 import { Type } from "class-transformer";
 import { ApiProperty } from '@nestjs/swagger';
 export class CreateMasterRecordDto {
 
-    @ApiProperty()
+    @ApiProperty({
+        type: String,
+        // description: 'id of the master student'
+    })
     @IsOptional()
-    @NotContains("!@#$%^&*()")
+    @IsUUID()
     id: string
 
-    @ApiProperty()
+    @ApiProperty({
+        enum: coeStatusEnum,
+        // description: 'coeStatus of the master student'
+    })
     @IsNotEmpty()
     @IsIn([
         coeStatusEnum.Approved,
@@ -18,24 +24,41 @@ export class CreateMasterRecordDto {
     ])
     coeStatus: coeStatusEnum
 
-    @ApiProperty()
+    @ApiProperty({ 
+        type: String,
+        // description: 'coeType of the master student'
+    })
+    @IsString()
     @IsNotEmpty()
+    @IsAlpha()
     coeType: string
 
-    @ApiProperty()
+    @ApiProperty({
+        type: Number,
+        // description: 'providerStudentID of the master student'
+    })
     @IsNotEmpty()
+    @IsNumber()
     providerStudentID: number
 
-    @ApiProperty()
+    @ApiProperty({
+        type: String,
+        // description: 'firstName of the master student'
+    })
     @IsNotEmpty()
     @IsAlpha()
     firstName: string
 
-    @ApiProperty()
+    @ApiProperty({
+        type: String,
+    })
+    @IsAlpha()
     @IsNotEmpty()
     familyName: string
 
-    @ApiProperty()
+    @ApiProperty({
+        enum: genderEnum
+    })
     @IsNotEmpty()
     @IsIn([
         genderEnum.Female,
@@ -44,57 +67,86 @@ export class CreateMasterRecordDto {
     ])
     gender: genderEnum
 
-    @ApiProperty()
+    @ApiProperty({
+        type: Date
+    })
     @IsNotEmpty()
     @IsDate()
     @Type(() => Date)
     dateOfBirth: Date
 
-    @ApiProperty()
+    @ApiProperty({
+        type: String
+    })
+    @IsString()
     @IsNotEmpty()
+    @IsAlpha()
     nationality: string
 
-    @ApiProperty()
+    @ApiProperty({
+        type: String,
+    })
+    
     @IsNotEmpty()
+    @IsString()
+    @IsAlpha()
     courseName: string;
 
-    @ApiProperty()
+    @ApiProperty({
+        type: Date
+    })
     @IsNotEmpty()
     @Type(() => Date)
     proposedStartDate: Date;
 
-    @ApiProperty()
+    @ApiProperty({
+        type: Date
+    })
     @IsNotEmpty()
     @Type(() => Date)
     proposedEndDate: Date;
 
-    @ApiProperty()
+    @ApiProperty({
+        type: Date,
+    })
     @IsNotEmpty()
     @Type(() => Date)
     visaEffectiveDate: Date;
 
-    @ApiProperty()
+    @ApiProperty({
+        type: String,
+    })
     @IsOptional()
+    @IsString()
     enrolmentComments: string;
 
-    @ApiProperty()
+    @ApiProperty({
+        type: String,
+    })
     @IsNotEmpty()
+    @IsString()
     locationName: string;
 
-    @ApiProperty()
+    @ApiProperty({
+        enum: studentTypeEnum
+    })
     @IsNotEmpty()
     @IsIn([
         studentTypeEnum.Commencing
     ])
     studentType: studentTypeEnum;
 
-    @ApiProperty()
+    @ApiProperty({
+        type: Date
+    })
     @IsNotEmpty()
     @Type(() => Date)
     lastChangedDateTime: Date;
     
 
-    @ApiProperty()
+    @ApiProperty({
+        type: Date
+    })
     @IsNotEmpty()
     @Type(() => Date)
     createDateTime: Date;

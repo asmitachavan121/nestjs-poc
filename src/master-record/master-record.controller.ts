@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Body, UseInterceptors, UploadedFile, Patch, Delete, Param, ValidationPipe, UsePipes} from '@nestjs/common';
+import {Controller, Get, Post, Body, UseInterceptors, UploadedFile, Patch, Delete, Param, ValidationPipe, UsePipes, ParseUUIDPipe} from '@nestjs/common';
 import {MasterRecordService} from "./master-record.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { CreateMasterRecordDto } from '../Dto/create-master-record.dto'
@@ -15,6 +15,7 @@ export class MasterRecordController {
 
     @Get()
     @ApiResponse({ status: 200, description: 'The record has been successfully fetched.'})
+    @ApiResponse({ status: 500, description:'Internal server error'})
     getMasterRecord() {      
 
         // const mygender: genderEnum =  genderEnum.Female
@@ -25,7 +26,7 @@ export class MasterRecordController {
 
     @Get(':id')
     @ApiResponse({ status: 200, description: 'The record has been successfully fetched.'})
-    getMasterRecordById(@Param('id') id: string) {
+    getMasterRecordById(@Param('id', ParseUUIDPipe) id: string) {
 
         return this.masterRecordService.getMasterRecordById(id)
     }
@@ -33,8 +34,7 @@ export class MasterRecordController {
     @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
     @UsePipes(ValidationPipe)
     // @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
-    async uploadData(@Body(ValidationPipe) data: CreateMasterRecordDto): Promise<MasterStudentEntity> {
-        // console.log(data)
+    async uploadData( @Body(ValidationPipe) data: CreateMasterRecordDto): Promise<MasterStudentEntity> {
         try {
            return this.masterRecordService.insertData(data);
 
@@ -44,18 +44,18 @@ export class MasterRecordController {
         // return data
     }
 
-    @Patch('patch/:id')
+    @Patch('update/:id')
     @ApiResponse({ status: 200, description: 'The record has been successfully updated.'})
     @UsePipes(ValidationPipe)
-    updateData(@Param('id') id:string, @Body() data: UpdateMasterRecordDto) {
+    updateData(@Param('id', ParseUUIDPipe) id:string, @Body() data: UpdateMasterRecordDto) {
 
-        console.log('data is = ',data)
+        // console.log('data is = ',data)
         return this.masterRecordService.updateData(id, data)
     }
 
     @Delete('delete/:id')
     @ApiResponse({ status: 200, description: 'The record has been successfully deleted.'})
-    deleteData(@Param('id') id: string) {
+    deleteData(@Param('id', ParseUUIDPipe) id: string) {
 
 
         // console.log(id)

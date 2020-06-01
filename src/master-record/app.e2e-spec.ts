@@ -1,10 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../src/app.module';
+import { AppModule } from '../app.module';
 import 'jest-extended'
-import { coeStatusEnum, genderEnum, studentTypeEnum } from '../src/model/master-student.entity';
-import { async } from 'rxjs/internal/scheduler/async';
  
 
 describe('AppController (e2e)', () => {
@@ -39,7 +37,7 @@ describe('AppController (e2e)', () => {
       .expect(200)
      expect(res.body).toBeArray()
      id = res.body[0].id
-    //  console.log(id)
+     console.log(id)
       // .expect('Hello World!');
     // }catch(err) {
 

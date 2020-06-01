@@ -1,4 +1,4 @@
-import { IsIn, IsOptional, IsDate} from 'class-validator'
+import { IsIn, IsOptional, IsDate, IsString, IsAlpha, IsNumber, IsAlphanumeric} from 'class-validator'
 import { coeStatusEnum, studentTypeEnum } from "../model/master-student.entity";
 import { genderEnum } from "../model/master-student.entity";
 import { Type } from "class-transformer";
@@ -12,15 +12,19 @@ export class UpdateMasterRecordDto {
     coeStatus: coeStatusEnum
 
     @IsOptional()
+    @IsAlpha()
     coeType: string
 
     @IsOptional()
+    @IsNumber()
     providerStudentID: number
 
     @IsOptional()
+    @IsAlpha()
     firstName: string
 
     @IsOptional()
+    @IsAlpha()
     familyName: string
 
     @IsOptional()
@@ -37,9 +41,11 @@ export class UpdateMasterRecordDto {
     dateOfBirth: Date
 
     @IsOptional()
+    @IsAlpha()
     nationality: string
 
     @IsOptional()
+    @IsAlpha()
     courseName: string;
 
     @IsOptional()
@@ -55,9 +61,11 @@ export class UpdateMasterRecordDto {
     visaEffectiveDate: Date;
 
     @IsOptional()
+    @IsAlphanumeric()
     enrolmentComments: string;
 
     @IsOptional()
+    @IsAlphanumeric()
     locationName: string;
 
     @IsOptional()
