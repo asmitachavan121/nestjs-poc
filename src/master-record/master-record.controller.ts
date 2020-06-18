@@ -26,12 +26,14 @@ export class MasterRecordController {
 
     @Get(':id')
     @ApiResponse({ status: 200, description: 'The record has been successfully fetched.'})
+    @ApiResponse({ status: 500, description:'Internal server error'})
     getMasterRecordById(@Param('id', ParseUUIDPipe) id: string) {
 
         return this.masterRecordService.getMasterRecordById(id)
     }
     @Post('upload')
     @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
+    @ApiResponse({ status: 500, description:'Internal server error'})
     @UsePipes(ValidationPipe)
     // @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
     async uploadData( @Body(ValidationPipe) data: CreateMasterRecordDto): Promise<MasterStudentEntity> {
@@ -46,6 +48,7 @@ export class MasterRecordController {
 
     @Patch('update/:id')
     @ApiResponse({ status: 200, description: 'The record has been successfully updated.'})
+    @ApiResponse({ status: 500, description:'Internal server error'})
     @UsePipes(ValidationPipe)
     updateData(@Param('id', ParseUUIDPipe) id:string, @Body() data: UpdateMasterRecordDto) {
 
@@ -55,16 +58,15 @@ export class MasterRecordController {
 
     @Delete('delete/:id')
     @ApiResponse({ status: 200, description: 'The record has been successfully deleted.'})
+    @ApiResponse({ status: 500, description:'Internal server error'})
     deleteData(@Param('id', ParseUUIDPipe) id: string) {
-
-
-        // console.log(id)
         return this.masterRecordService.deleteData(id)
     }
 
 
     @Post('uploadfile')
     @ApiResponse({ status: 200, description: 'The record has been successfully created.'})
+    @ApiResponse({ status: 500, description:'Internal server error'})
     @UseInterceptors(FileInterceptor('file'))
         uploadFile(@UploadedFile() file) {
         console.log(file);

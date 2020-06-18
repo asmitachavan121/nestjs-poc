@@ -1,10 +1,10 @@
-version: '3.3'
+version: '3.2'
 
 services: 
   db:
     image: postgres:latest
     container_name: postDB
-    # restart: always
+    restart: always
     ports: 
       - "5432:5432"
     environment: 
