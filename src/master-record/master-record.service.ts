@@ -1,5 +1,4 @@
-import { Injectable, ConflictException, InternalServerErrorException, NotAcceptableException, Options, NotFoundException } from '@nestjs/common';
-import { client } from './dbconnect.service';
+import { Injectable, ConflictException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { MasterStudentEntity } from '../model/master-student.entity';
 import { CreateMasterRecordDto } from 'src/Dto/create-master-record.dto';
 // import { Db } from 'typeorm';
@@ -71,7 +70,7 @@ export class MasterRecordService {
 
         const studentRepo = MasterStudentEntity.getRepository()
         const newdata = await this.getMasterRecordById(id)
-        const res = await studentRepo.update(id, data)
+        await studentRepo.update(id, data)
         return newdata.id
     }
 

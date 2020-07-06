@@ -1,0 +1,27 @@
+{
+    "type": "postgres",
+    "host": "db",
+    "port": 5432,
+    "username": "postgres",
+    "password": "mysecretpassword",
+    "database": "my_database",
+    "migrationsTableName": "migration",
+    "entities": [
+      "dist/model/**/*.js",
+      "/Users/user/Desktop/pac-backend/src/config/../**/*.entity.{js,ts}"
+    ],
+    "migrations": [
+      "dist/migration/**/*.js"
+    ],
+    "subscribers": [
+      "dist/subscriber/**/*.js"
+    ],
+    "cli": {
+      "entitiesDir": "src/model",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+    },
+    "ssl": false,
+    "keepConnectionAlive": true,
+    "synchronize": true
+  }

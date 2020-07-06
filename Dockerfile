@@ -1,17 +1,51 @@
-FROM node:latest
+FROM node
 
-WORKDIR /app
+WORKDIR /usr/app
 
-ADD /package.json /app/package.json
-
-# RUN npm config set reigstry http://registry.npmjs.org
+COPY package*.json  ./
 
 RUN npm install
 
-ADD . /app
+COPY . .
+
+COPY ormconfig.docker.json ./ormconfig.json
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+CMD npm run start
+
+# # step 1
+
+# FROM node as builder
+
+# WORKDIR /usr/app
+
+# COPY package*.json ./
+
+# RUN npm install
+
+# COPY . .
+
+# RUN npm run build
+
+# #step 2
+
+# FROM node
+
+# WORKDIR /usr/app
+
+# COPY package*.json ./
+
+# RUN npm install --production
+
+# COPY --from=builder /usr/app/dist  ./dist
+
+# COPY ormconfig.docker.json  ormconfig.json
+
+# COPY .env .
+
+# EXPOSE 3000
+
+# CMD npm run start
 
 
